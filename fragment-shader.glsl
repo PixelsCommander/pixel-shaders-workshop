@@ -48,9 +48,15 @@ float arc(vec2 uv, vec2 center, float startAngle, float endAngle, float innerRad
   return result;
 }
 
+vec4 rgb(float r, float g, float b) {
+    return vec4(r / 255., g / 255., b / 255., 1.);
+}
+
 void main() {
   vec2 coord = vec2(gl_FragCoord);
-  float width = 7.;
+  float width = 2.;
+  vec4 color = rgb(45., 121., 184.);
+  vec4 backgroundColor = vec4(1.);
   float halfPI = PI * .5;
   float periodicTime = mod(u_time, PI) - halfPI;
 
@@ -68,5 +74,5 @@ void main() {
   float endAngle = 360. * endAngleVariation + rotation - 90.;
 
   float isFilled = arc(coord, center, - startAngle, - endAngle, innerRadius, outerRadius);
-  gl_FragColor = vec4(1. - isFilled);
+  gl_FragColor = (backgroundColor - (backgroundColor - color) * isFilled);
 }
