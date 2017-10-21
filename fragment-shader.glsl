@@ -54,13 +54,16 @@ vec4 rgb(float r, float g, float b) {
 
 void main() {
   vec2 coord = vec2(gl_FragCoord);
-  float width = 2.;
-  vec4 color = rgb(45., 121., 184.);
-  vec4 backgroundColor = vec4(1.);
-  float halfPI = PI * .5;
-  float periodicTime = mod(u_time, PI) - halfPI;
-
   float outerRadius = min(u_resolution.x, u_resolution.y) * .5;
+  float distanceToMouse = distance(u_mouse, gl_FragCoord.xy) * 0.033;
+  float distanceToMouseFromCenter = distance(u_mouse, center);
+  float distanceToMouseFromCircle = abs(outerRadius - distanceToMouseFromCenter);
+  float width = 2. + distanceToMouseFromCircle / distanceToMouse;
+  vec4 backgroundColor = vec4(0.);
+  float halfPI = PI * .5;
+  float periodicTime = mod(u_time * .25, PI) - halfPI;
+  vec4 color = rgb(255. * (sin(periodicTime) + 1.), 60. * distanceToMouse / 2., 160.) * (radius / distance(gl_FragCoord.xy, center));
+
   float innerRadius = outerRadius - width;
 
   float startX = clamp(periodicTime, -halfPI, 0.);
