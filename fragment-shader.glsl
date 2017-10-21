@@ -51,8 +51,21 @@ float arc(vec2 uv, vec2 center, float startAngle, float endAngle, float innerRad
 void main() {
   vec2 coord = vec2(gl_FragCoord);
   float width = 7.;
+  float halfPI = PI * .5;
+  float periodicTime = mod(u_time, PI) - halfPI;
+
   float outerRadius = min(u_resolution.x, u_resolution.y) * .5;
   float innerRadius = outerRadius - width;
-  float isFilled = arc(coord, center, 0., 75., innerRadius, outerRadius);
+
+  float startX = clamp(periodicTime, -halfPI, 0.);
+  float endX = clamp(periodicTime, 0., halfPI);
+
+  float angleVariation = sin(startX) + 1.;
+  float endAngleVariation = sin(endX);
+
+  float startAngle = 360. * angleVariation;
+  float endAngle = 360. * endAngleVariation;
+
+  float isFilled = arc(coord, center, - startAngle, - endAngle, innerRadius, outerRadius);
   gl_FragColor = vec4(1. - isFilled);
 }
