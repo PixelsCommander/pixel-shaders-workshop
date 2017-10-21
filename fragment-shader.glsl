@@ -13,7 +13,7 @@ float radius = min(u_resolution.x, u_resolution.y) * .5;
 
 float circle(vec2 coord, vec2 center, float radius) {
   float distanceToCenter = distance(coord, center);
-  return step(distanceToCenter, radius);
+  return smoothstep(distanceToCenter - 2., distanceToCenter, radius);
 }
 
 bool isAngleBetween(float target, float angle1, float angle2) {
