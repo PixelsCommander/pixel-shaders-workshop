@@ -42,8 +42,17 @@ float sector(vec2 coord, vec2 center, float startAngle, float endAngle) {
   }
 }
 
+float arc(vec2 uv, vec2 center, float startAngle, float endAngle, float innerRadius, float outerRadius) {
+  float result = 0.0;
+  result = sector(uv, center, startAngle, endAngle) * circle(uv, center, outerRadius) * (1.0 - circle(uv, center, innerRadius));
+  return result;
+}
+
 void main() {
   vec2 coord = vec2(gl_FragCoord);
-  float isFilled = circle(coord, center, radius) * sector(coord, center, 0., 75.);
+  float width = 7.;
+  float outerRadius = min(u_resolution.x, u_resolution.y) * .5;
+  float innerRadius = outerRadius - width;
+  float isFilled = arc(coord, center, 0., 75., innerRadius, outerRadius);
   gl_FragColor = vec4(1. - isFilled);
 }
