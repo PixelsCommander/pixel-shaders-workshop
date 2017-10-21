@@ -62,9 +62,10 @@ void main() {
 
   float angleVariation = sin(startX) + 1.;
   float endAngleVariation = sin(endX);
+  float rotation = 180. * (sin(periodicTime) + 1.);
 
-  float startAngle = 360. * angleVariation;
-  float endAngle = 360. * endAngleVariation;
+  float startAngle = 360. * angleVariation + rotation - 90.;
+  float endAngle = 360. * endAngleVariation + rotation - 90.;
 
   float isFilled = arc(coord, center, - startAngle, - endAngle, innerRadius, outerRadius);
   gl_FragColor = vec4(1. - isFilled);
